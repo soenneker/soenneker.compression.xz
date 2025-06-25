@@ -5,11 +5,11 @@ using Xunit;
 namespace Soenneker.Compression.XZ.Tests;
 
 [Collection("Collection")]
-public sealed class IxzUtilTests : FixturedUnitTest
+public sealed class XZUtilTests : FixturedUnitTest
 {
     private readonly IXZUtil _util;
 
-    public IxzUtilTests(Fixture fixture, ITestOutputHelper output) : base(fixture, output)
+    public XZUtilTests(Fixture fixture, ITestOutputHelper output) : base(fixture, output)
     {
         _util = Resolve<IXZUtil>(true);
     }

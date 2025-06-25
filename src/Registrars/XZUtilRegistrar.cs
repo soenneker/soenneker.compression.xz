@@ -12,7 +12,7 @@ public static class XZUtilRegistrar
     /// <summary>
     /// Adds <see cref="IXZUtil"/> as a singleton service. <para/>
     /// </summary>
-    public static IServiceCollection AddXzUtilAsSingleton(this IServiceCollection services)
+    public static IServiceCollection AddXZUtilAsSingleton(this IServiceCollection services)
     {
         services.TryAddSingleton<IXZUtil, XZUtil>();
 
@@ -22,7 +22,7 @@ public static class XZUtilRegistrar
     /// <summary>
     /// Adds <see cref="IXZUtil"/> as a scoped service. <para/>
     /// </summary>
-    public static IServiceCollection AddXzUtilAsScoped(this IServiceCollection services)
+    public static IServiceCollection AddXZUtilAsScoped(this IServiceCollection services)
     {
         services.TryAddScoped<IXZUtil, XZUtil>();
 
