@@ -27,7 +27,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\Soenneker.Compression.XZ.csproj" />
+        <ProjectReference Include="..\..\src\Soenneker.Compression.XZ\Soenneker.Compression.XZ.csproj" />
     </ItemGroup>
 
     <ItemGroup>
