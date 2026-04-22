@@ -1,20 +1,19 @@
-﻿using Soenneker.Compression.XZ.Abstract;
-using Soenneker.Tests.FixturedUnit;
-using Xunit;
+using Soenneker.Compression.XZ.Abstract;
+using Soenneker.Tests.HostedUnit;
 
 namespace Soenneker.Compression.XZ.Tests;
 
-[Collection("Collection")]
-public sealed class XZUtilTests : FixturedUnitTest
+[ClassDataSource<Host>(Shared = SharedType.PerTestSession)]
+public sealed class XZUtilTests : HostedUnitTest
 {
     private readonly IXZUtil _util;
 
-    public XZUtilTests(Fixture fixture, ITestOutputHelper output) : base(fixture, output)
+    public XZUtilTests(Host host) : base(host)
     {
         _util = Resolve<IXZUtil>(true);
     }
 
-    [Fact]
+    [Test]
     public void Default()
     {
 
