@@ -1,4 +1,4 @@
-﻿using SharpCompress.Compressors.Xz;
+using LzmaNet;
 using Soenneker.Compression.XZ.Abstract;
 using System.IO;
 using System.Threading;
@@ -46,7 +46,7 @@ public sealed class XZUtil : IXZUtil
         };
 
         await using var input = new FileStream(filePath, inputOptions);
-        await using var xz = new XZStream(input);
+        await using var xz = new XzDecompressStream(input);
         await using var output = new FileStream(outputFilePath, outputOptions);
 
         await xz.CopyToAsync(output, _copyBufferSize, cancellationToken).NoSync();
