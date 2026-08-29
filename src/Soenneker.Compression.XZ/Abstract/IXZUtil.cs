@@ -9,11 +9,11 @@ namespace Soenneker.Compression.XZ.Abstract;
 public interface IXZUtil
 {
     /// <summary>
-    /// Executes the decompress operation.
+    /// Decompresses XZ.
     /// </summary>
-    /// <param name="filePath">The file path.</param>
-    /// <param name="outputFilePath">The output file path.</param>
-    /// <param name="cancellationToken">The cancellation token.</param>
-    /// <returns>A task that represents the asynchronous operation.</returns>
+    /// <param name="filePath">Path of the file to use.</param>
+    /// <param name="outputFilePath">Path of the output file to use.</param>
+    /// <param name="cancellationToken">Token used to cancel the operation.</param>
+    /// <returns>A task that completes when the decompress operation is complete.</returns>
     ValueTask Decompress(string filePath, string outputFilePath, CancellationToken cancellationToken = default);
 }
