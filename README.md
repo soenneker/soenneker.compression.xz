@@ -5,7 +5,7 @@
 
 # Soenneker.Compression.XZ
 
-A utility library dealing with XZ compression and decompression.
+Streams an XZ-compressed file to a decompressed output file.
 
 ## Install
 
@@ -13,31 +13,39 @@ A utility library dealing with XZ compression and decompression.
 dotnet add package Soenneker.Compression.XZ
 ```
 
-## Quick start
+## Registration
 
 ```csharp
 using Soenneker.Compression.XZ.Registrars;
 using Microsoft.Extensions.DependencyInjection;
 
 var services = new ServiceCollection();
-var result = services.AddXZUtilAsSingleton();
+services.AddXZUtilAsSingleton();
 ```
 
-Adds `IXZUtil` as a singleton service.
+Use `AddXZUtilAsScoped()` instead when its lifetime should follow a dependency-injection scope.
 
-## What you get
+## Usage
 
-- `IXZUtil` — A utility library dealing with XZ compression and decompression.
-- `XZUtilRegistrar` — A utility library dealing with XZ compression and decompression.
+```csharp
+using Soenneker.Compression.XZ.Abstract;
 
-## API at a glance
+public sealed class SnapshotDecoder(IXZUtil xzUtil)
+{
+    public ValueTask Decode(CancellationToken cancellationToken = default)
+    {
+        return xzUtil.Decompress("snapshot.json.xz", "snapshot.json", cancellationToken);
+    }
+}
+```
 
-| API | What it does | Result / important behavior |
-| --- | --- | --- |
-| `IXZUtil.Decompress(filePath, outputFilePath, cancellationToken)` | Decompresses XZ. | A task that completes when the decompress operation is complete. |
-| `XZUtilRegistrar.AddXZUtilAsSingleton(services)` | Adds `IXZUtil` as a singleton service. | The same service collection, so additional registrations can be chained. |
-| `XZUtilRegistrar.AddXZUtilAsScoped(services)` | Adds `IXZUtil` as a scoped service. | The same service collection, so additional registrations can be chained. |
+The decoder writes to a uniquely named sibling file and moves it over `outputFilePath` only after decompression succeeds. An existing output therefore remains intact if decoding fails or is cancelled.
 
 ## Practical notes
 
-- Cancellation stops pending work; it does not undo work that has already completed.
+- The output file's parent directory must already exist.
+- A successfully decoded file replaces an existing output at the requested path.
+- Temporary output is removed after failure or cancellation.
+- Decompressed data is streamed with a 128 KiB buffer rather than loaded into memory.
+- This package decompresses XZ; it does not create XZ streams.
+- XZ files can expand substantially. Enforce input and storage limits before decoding untrusted content.

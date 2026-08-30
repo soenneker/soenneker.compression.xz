@@ -1,5 +1,6 @@
 using LzmaNet;
 using Soenneker.Compression.XZ.Abstract;
+using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -36,19 +37,40 @@ public sealed class XZUtil : IXZUtil
             BufferSize = _copyBufferSize
         };
 
+        string temporaryOutputPath = $"{outputFilePath}.{Guid.NewGuid():N}.tmp";
+
         var outputOptions = new FileStreamOptions
         {
-            Mode = FileMode.Create,
+            Mode = FileMode.CreateNew,
             Access = FileAccess.Write,
             Share = FileShare.None,
             Options = FileOptions.Asynchronous | FileOptions.SequentialScan,
             BufferSize = _copyBufferSize
         };
 
-        await using var input = new FileStream(filePath, inputOptions);
-        await using var xz = new XzDecompressStream(input);
-        await using var output = new FileStream(outputFilePath, outputOptions);
+        try
+        {
+            await using (var input = new FileStream(filePath, inputOptions))
+            await using (var xz = new XzDecompressStream(input))
+            await using (var output = new FileStream(temporaryOutputPath, outputOptions))
+            {
+                await xz.CopyToAsync(output, _copyBufferSize, cancellationToken).NoSync();
+            }
 
-        await xz.CopyToAsync(output, _copyBufferSize, cancellationToken).NoSync();
+            File.Move(temporaryOutputPath, outputFilePath, true);
+        }
+        catch
+        {
+            try
+            {
+                File.Delete(temporaryOutputPath);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogWarning(exception, "Could not remove incomplete XZ output");
+            }
+
+            throw;
+        }
     }
 }
