@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Soenneker.Extensions.Task;
+using Soenneker.Extensions.ValueTask;
 using Soenneker.Utils.File.Abstract;
 
 namespace Soenneker.Compression.XZ;
@@ -34,6 +35,6 @@ public sealed class XZUtil : IXZUtil
             await using var input = _fileUtil.OpenRead(filePath, log: false);
             await using var xz = new XzDecompressStream(input);
             await xz.CopyToAsync(output, _copyBufferSize, ct).NoSync();
-        }, log: false, cancellationToken).ConfigureAwait(false);
+        }, log: false, cancellationToken).NoSync();
     }
 }
