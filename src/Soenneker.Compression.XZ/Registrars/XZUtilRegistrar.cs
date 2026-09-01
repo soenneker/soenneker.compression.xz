@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Soenneker.Compression.XZ.Abstract;
+using Soenneker.Utils.File.Registrars;
 
 namespace Soenneker.Compression.XZ.Registrars;
 
@@ -16,7 +17,7 @@ public static class XZUtilRegistrar
     /// <returns>The same service collection, so additional registrations can be chained.</returns>
     public static IServiceCollection AddXZUtilAsSingleton(this IServiceCollection services)
     {
-        services.TryAddSingleton<IXZUtil, XZUtil>();
+        services.AddFileUtilAsSingleton().TryAddSingleton<IXZUtil, XZUtil>();
 
         return services;
     }
@@ -28,7 +29,7 @@ public static class XZUtilRegistrar
     /// <returns>The same service collection, so additional registrations can be chained.</returns>
     public static IServiceCollection AddXZUtilAsScoped(this IServiceCollection services)
     {
-        services.TryAddScoped<IXZUtil, XZUtil>();
+        services.AddFileUtilAsScoped().TryAddScoped<IXZUtil, XZUtil>();
 
         return services;
     }
