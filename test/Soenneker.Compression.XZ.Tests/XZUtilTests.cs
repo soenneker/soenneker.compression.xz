@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Security.Cryptography;
+using System.Threading;
 using System.Threading.Tasks;
 using Soenneker.Compression.XZ.Abstract;
 using Soenneker.Tests.HostedUnit;
@@ -18,7 +19,7 @@ public sealed class XZUtilTests : HostedUnitTest
     }
 
     [Test]
-    public async Task Decompress_BcjLzma2Archive()
+    public async Task Decompress_BcjLzma2Archive(CancellationToken cancellationToken)
     {
         const string compressed =
             "/Td6WFoAAAFpIt42AgEEACEBFgANhjUf4///AH9dAABv/f//o7f/Rz5IFXI5YVG4kijmo4YH+e7kHoLTL8U6PAFLsX7JiopNL6MN2X+m44wjEVPgWRjFdYrid/i2lH8MasDedElk4ulcU7IE2PdEDKtZ4ugje5u5w+PdTgt9QnobE+/60+0+bW7Qlu7dH0rzDaWr0k3aii8vcdXKWsAAANETr1gAAZcBgIAQAHxk+Lg+MA2LAgAAAAABWVo=";
@@ -30,7 +31,7 @@ public sealed class XZUtilTests : HostedUnitTest
         try
         {
             await File.WriteAllBytesAsync(inputPath, Convert.FromBase64String(compressed));
-            await _util.Decompress(inputPath, outputPath);
+            await _util.Decompress(inputPath, outputPath, cancellationToken: cancellationToken);
 
             await using FileStream output = File.OpenRead(outputPath);
             string actualSha256 = Convert.ToHexString(await SHA256.HashDataAsync(output));
