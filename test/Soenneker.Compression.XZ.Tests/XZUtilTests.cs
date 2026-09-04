@@ -1,9 +1,9 @@
 using System;
 using System.IO;
-using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using Soenneker.Compression.XZ.Abstract;
+using Soenneker.Hashing.Sha256;
 using Soenneker.Tests.HostedUnit;
 
 namespace Soenneker.Compression.XZ.Tests;
@@ -11,6 +11,8 @@ namespace Soenneker.Compression.XZ.Tests;
 [ClassDataSource<Host>(Shared = SharedType.PerTestSession)]
 public sealed class XZUtilTests : HostedUnitTest
 {
+    private static readonly Sha256HashingUtil _sha256 = new();
+
     private readonly IXZUtil _util;
 
     public XZUtilTests(Host host) : base(host)
@@ -34,7 +36,7 @@ public sealed class XZUtilTests : HostedUnitTest
             await _util.Decompress(inputPath, outputPath, cancellationToken: cancellationToken);
 
             await using FileStream output = File.OpenRead(outputPath);
-            string actualSha256 = Convert.ToHexString(await SHA256.HashDataAsync(output));
+            string actualSha256 = Convert.ToHexString(await _sha256.Hash(output, cancellationToken));
 
             await Assert.That(actualSha256).IsEqualTo(expectedSha256);
         }
