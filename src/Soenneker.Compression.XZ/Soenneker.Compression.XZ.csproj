@@ -46,6 +46,6 @@
 
     <ItemGroup>
         <PackageReference Include="Lzma.Net" Version="5.8.4.1" />
-        <PackageReference Include="Soenneker.Utils.File" Version="4.0.2281" />
+        <PackageReference Include="Soenneker.Utils.File" Version="4.0.2283" />
     </ItemGroup>
 </Project>
