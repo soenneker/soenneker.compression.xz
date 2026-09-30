@@ -25,7 +25,7 @@ public sealed class XZUtilTests : HostedUnitTest
     }
 
     [Test]
-    public async Task Decompress_BcjLzma2Archive(CancellationToken cancellationToken)
+    public async ValueTask Decompress_BcjLzma2Archive(CancellationToken cancellationToken)
     {
         const string compressed =
             "/Td6WFoAAAFpIt42AgEEACEBFgANhjUf4///AH9dAABv/f//o7f/Rz5IFXI5YVG4kijmo4YH+e7kHoLTL8U6PAFLsX7JiopNL6MN2X+m44wjEVPgWRjFdYrid/i2lH8MasDedElk4ulcU7IE2PdEDKtZ4ugje5u5w+PdTgt9QnobE+/60+0+bW7Qlu7dH0rzDaWr0k3aii8vcdXKWsAAANETr1gAAZcBgIAQAHxk+Lg+MA2LAgAAAAABWVo=";
