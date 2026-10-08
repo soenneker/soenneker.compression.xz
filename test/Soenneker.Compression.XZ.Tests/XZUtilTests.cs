@@ -36,7 +36,7 @@ public sealed class XZUtilTests : HostedUnitTest
 
         try
         {
-            await _fileUtil.Write(inputPath, Convert.FromBase64String(compressed));
+            await _fileUtil.Write(inputPath, Convert.FromBase64String(compressed), cancellationToken: cancellationToken);
             await _util.Decompress(inputPath, outputPath, cancellationToken: cancellationToken);
 
             await using FileStream output = _fileUtil.OpenRead(outputPath);
