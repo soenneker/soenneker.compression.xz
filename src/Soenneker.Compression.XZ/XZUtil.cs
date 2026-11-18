@@ -28,7 +28,8 @@ public sealed class XZUtil : IXZUtil
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        _logger.LogDebug("Decompressing XZ file: {XzFilePath} to {OutputFilePath} ...", filePath, outputFilePath);
+        if (_logger.IsEnabled(LogLevel.Debug))
+            _logger.LogDebug("Decompressing XZ file: {XzFilePath} to {OutputFilePath} ...", filePath, outputFilePath);
 
         await _fileUtil.WriteAtomically(outputFilePath, async (output, ct) =>
         {
